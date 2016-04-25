@@ -31,6 +31,7 @@
  *					'hoverClass': '',				// class of hover
  *					'selectedClass': '',			// class of item which is selected
  *					'selectEvent': '',				// the event triggering selected of one item
+ *					'childExpansion': false,		// whether expand sublist by default
  *					'childExpandEvent': '',			// the event triggering expanded of item's sublist
  *					'childFoldEvent': '',			// the event triggering fold of item's sublist
  *					'position': '',					// the position relative to its parent

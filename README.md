@@ -74,33 +74,56 @@ $ bower install awesome-menu
 ```
 
 ### Options
-> menuId	type: string
-##### description:
-the most outside container's id
+> menuId	(string)
 
-> menuClass	type: string
+##### description:
+The most outside container's id.
+
+> menuClass	(string)
+
 ##### description: 
-the most outside container's class
+The most outside container's class.
 
-> defaultSelected	type: object
-##### description:
-default selected item. 
+> defaultSelected	(object)
 
-> onlyOneExpansion	type: boolean
 ##### description:
- `true` means there is only one expanded in the same level all the time. 
+Set the default selected item when the menu is initilized.	It contains two attributes: `id` and 'level'.
 
-> selectedFunc(data)	type: function
-##### description:
-customized callback when one item is selected. The `data` parameter records current selected item's releative info.
+> onlyOneExpansion	(boolean)
 
-> list	type: array
 ##### description:
-nested list data.
+Determine whether there is only one expanded list in the same level all the time. Default is true.
 
-> levelConfig	type: object
+> selectedFunc(data)	(function)
+
 ##### description:
-configuraiton for each level.
+Customized callback when one item is selected. The `data` parameter records current selected item's releative information.
+
+> list	(array)
+
+##### description:
+It is a nested data structure which contains the menu's data.
+
+> levelConfig	(object)
+
+##### description:
+It is the configuraiton for each level. Attribute '1' represents the configuration for the first level and so on. Each level inherit its parent level by default if the level is not configured.
+
+And it has many optional configuration parameters:
+
+|attribute|description|
+|:--|:--|
+|listClass| the class of each sublist's outside container|
+|wrapClass| the class of each item's outside container|
+|itemClass| the class of each item|
+|hoverClass| the class of each item when triggering hover event|
+|selectedClass| the class of each item when it is selected|
+|selectEvent| the event type which can trigger item's selection|
+|childExpansion| whether sublist is expanded by default|
+|childExpandEvent| the event type which can trigger sublist's expansion|
+|childFoldEvent| the event type which can trigger sublist's fold|
+|position| the position relative to its parent list|
+|hideAfterSelected| whether hide when it is selected|
 
 ### Methods
 > render()
