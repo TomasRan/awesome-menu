@@ -246,7 +246,7 @@
 						'name': $(list).siblings().attr('data-name'),
 						'level': $(list).siblings().attr('data-level'),
 						'isLastLevel': this.hasSubList($(list).siblings())
-					})
+					});
 				}.bind(this));
 			}
 	
@@ -286,7 +286,7 @@
 				setTimeout(function() {
 					list.hide();
 				}, this.SELECTED_DISAPPEARED_TIME);
-			};
+			}
 	
 			target.addClass(selectedClass);
 	
@@ -306,7 +306,7 @@
 				return null;	
 			}
 	
-			if (option['id'] === undefined || option['level'] === undefined) {
+			if (option.id === undefined || option.level === undefined) {
 				return null;	
 			}
 	
@@ -352,7 +352,7 @@
 			});
 
 			if (!levelConfig.listClass) {
-				menuList.css(this.DEFAULT_CLASS['list']);
+				menuList.css(this.DEFAULT_CLASS.list);
 			}
 
 			if (getBoolean(parentLevelConfig.childExpansion)) {
@@ -373,7 +373,7 @@
 			});
 
 			if (!levelConfig.wrapClass) {
-				menuItem.css(this.DEFAULT_CLASS['wrap']);
+				menuItem.css(this.DEFAULT_CLASS.wrap);
 			}
 
 			var menuItemContent = createElement(this.ITEM_TAG);
@@ -386,7 +386,7 @@
 			}).appendTo(menuItem);
 	
 			if (!levelConfig.itemClass) {
-				menuItem.css(this.DEFAULT_CLASS['item']);
+				menuItem.css(this.DEFAULT_CLASS.item);
 			}
 
 			return menuItem;
@@ -474,7 +474,7 @@
 			});
 
 			if (!this.options.menuClass) {
-				this.menu.css(this.DEFAULT_CLASS['menu']);
+				this.menu.css(this.DEFAULT_CLASS.menu);
 			}
 	
 			if (menuContent) {
