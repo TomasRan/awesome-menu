@@ -1,7 +1,7 @@
 {
   "name": "awesome-menu",
-  "version": "1.0.0",
-  "description": "unlimited level menu",
+  "version": "1.0.1",
+  "description": "unlimilte level menu, customized menu",
   "main": "awesome-menu.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,6 +11,7 @@
     "url": "git+https://github.com/TomasRan/awesome-menu.git"
   },
   "keywords": [
+	"menu",
     "awesome-menu",
     "unlimited-level"
   ],
