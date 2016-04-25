@@ -7,10 +7,13 @@
 
 ## Description
 Good Compalibility.
-It supports UMD rules.<br/>
-It supports unlimited level.<br/>
-It supports custom style. You can customize different style for each level.<br/>
-It supports customized submenu expansion style. All what you should do is passing a kind of expansion event, or a kind of fold event.<br/>
+
+It supports unlimited level.
+
+It supports custom style. You can customize different style for each level.
+
+It supports customized submenu expansion style. All what you should do is passing a kind of expansion event, or a kind of fold event.
+
 It supports customized selected event. That means any event type can be the one of triggering selected. It depends on which you pass.
 
 It is easy to use. The configuration for each level can be inherited. More specifically, submenu inherits its parent menu's configuration (exclude menu data).
@@ -45,6 +48,7 @@ $ bower install awesome-menu
 ### Options
 > menuId
 the most outside container's id
+
 > menuClass
 the most outside container's class
 
