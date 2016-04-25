@@ -21,8 +21,7 @@ It is easy to use. The configuration for each level can be inherited. More speci
 Here are some simple instances:
 
 ![](http://cl.ly/312n3m082x1M/25E50F71-4506-4E84-BD2F-13D8392B1845.png)
-
-![](http://cl.ly/0T3W1W0I192K/Snip20160425_3.png)
+ ![](http://cl.ly/0T3W1W0I192K/Snip20160425_3.png)
 
 ## Install
 
@@ -75,60 +74,32 @@ $ bower install awesome-menu
 ```
 
 ### Options
-> menuId
-
-##### type: string
-
-##### description
-
+> menuId	type: string
+##### description:
 the most outside container's id
 
-> menuClass
-
-##### type: string
-
+> menuClass	type: string
 ##### description: 
-
 the most outside container's class
 
-> defaultSelected
-
-##### type: object
-
-##### description
-
+> defaultSelected	type: object
+##### description:
 default selected item. 
 
-> onlyOneExpansion
-
-##### type: boolean
-
-##### description
-
+> onlyOneExpansion	type: boolean
+##### description:
  `true` means there is only one expanded in the same level all the time. 
 
-> selectedFunc(data)
-
-##### type: function
-
-##### description
-
+> selectedFunc(data)	type: function
+##### description:
 customized callback when one item is selected. The `data` parameter records current selected item's releative info.
 
-> list
-
-##### type: array
-
-##### description
-
+> list	type: array
+##### description:
 nested list data.
 
-> levelConfig
-
-##### type: object
-
-##### description
-
+> levelConfig	type: object
+##### description:
 configuraiton for each level.
 
 ### Methods
