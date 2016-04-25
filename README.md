@@ -21,7 +21,8 @@ It is easy to use. The configuration for each level can be inherited. More speci
 Here are some simple instances:
 
 ![](http://cl.ly/312n3m082x1M/25E50F71-4506-4E84-BD2F-13D8392B1845.png)
- ![](http://cl.ly/0T3W1W0I192K/Snip20160425_3.png)
+
+![](http://cl.ly/0T3W1W0I192K/Snip20160425_3.png)
 
 ## Install
 
@@ -94,10 +95,10 @@ Set the default selected item when the menu is initilized.	It contains two attri
 ##### description:
 Determine whether there is only one expanded list in the same level all the time. Default is true.
 
-> selectedFunc(data)	(function)
+> selectedFunc	(function)
 
 ##### description:
-Customized callback when one item is selected. The `data` parameter records current selected item's releative information.
+Customized callback when one item is selected. and the callback function will get a parameter `data`. The `data` parameter records current selected item's releative information. And `this` is binded to the callback.
 
 > list	(array)
 
@@ -111,19 +112,19 @@ It is the configuraiton for each level. Attribute '1' represents the configurati
 
 And it has many optional configuration parameters:
 
-|attribute|description|
-|:--|:--|
-|listClass| the class of each sublist's outside container|
-|wrapClass| the class of each item's outside container|
-|itemClass| the class of each item|
-|hoverClass| the class of each item when triggering hover event|
-|selectedClass| the class of each item when it is selected|
-|selectEvent| the event type which can trigger item's selection|
-|childExpansion| whether sublist is expanded by default|
-|childExpandEvent| the event type which can trigger sublist's expansion|
-|childFoldEvent| the event type which can trigger sublist's fold|
-|position| the position relative to its parent list|
-|hideAfterSelected| whether hide when it is selected|
+|attribute|value|description|
+|:--|:--|:--|
+|listClass| _text_ | the class of each sublist's outside container|
+|wrapClass| _text_ | the class of each item's outside container|
+|itemClass| _text_ | the class of each item|
+|hoverClass| _text_ | the class of each item when triggering hover event|
+|selectedClass| _text_ | the class of each item when it is selected|
+|selectEvent| [event type] | the event type which can trigger item's selection|
+|childExpansion| [boolean] |whether sublist is expanded by default|
+|childExpandEvent| [event type] | the event type which can trigger sublist's expansion|
+|childFoldEvent| [event type] | the event type which can trigger sublist's fold|
+|position| 'right', 'left', 'top', 'bottom' |the position relative to its parent list|
+|hideAfterSelected| [boolean] | whether hide when it is selected|
 
 ### Methods
 > render()
