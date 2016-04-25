@@ -39,19 +39,110 @@ $ bower install awesome-menu
 ```
 	var Menu = require('awesome-menu');
 
-	var options = {...};
-	var menu = new Menu(options);
+	var menu = new Menu({
+		'menuId': 'menu',
+		'menuClass': 'menu',
+		'defaultSelected': {
+			'id': '1',
+			'level': '1'
+		},
+		'levelConfig': {
+			'1': {
+					'listClass': '',
+					'wrapClass': '',
+					'itemClass': '',
+					'selectedClass': '',
+					'hoverClass': '',
+					'selectEvent': '',
+					'childExpandEvent': '',
+					'childFoldEvent': '',
+					'position': '',
+					'hideAfterSelected': ''
+				},
+			'3': {
+				...	
+			}	
+		},
+		'list': [{
+			'id': '1',
+			'name': 'xxx',
+			'content': 'xxx',
+			'list': [{...}, {...}]
+		}, {...}]
+	});
 
 	$('xxx').append(menu.render());
 ```
 
 ### Options
 > menuId
+
+##### type: string
+
+##### description
+
 the most outside container's id
 
 > menuClass
+
+##### type: string
+
+##### description: 
+
 the most outside container's class
 
+> defaultSelected
+
+##### type: object
+
+##### description
+
+default selected item. 
+
+> onlyOneExpansion
+
+##### type: boolean
+
+##### description
+
+ `true` means there is only one expanded in the same level all the time. 
+
+> selectedFunc(data)
+
+##### type: function
+
+##### description
+
+customized callback when one item is selected. The `data` parameter records current selected item's releative info.
+
+> list
+
+##### type: array
+
+##### description
+
+nested list data.
+
+> levelConfig
+
+##### type: object
+
+##### description
+
+configuraiton for each level.
+
+### Methods
+> render()
+
+return the generated menu
+
+> reset(options)
+
+reset the whole menu according to the passed parameter
+
+> updateContent(option, content)
+
+update specific item's content
 
 ## License
 The MIT License (MIT)
