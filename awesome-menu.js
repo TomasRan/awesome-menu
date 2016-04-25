@@ -43,7 +43,7 @@
  *		});
  */
 
-(function(global, factory) {
+((function(global, factory) {
 	if (typeof define === 'function' && define.amd) {
 		define(['jquery'], function(jQuery) {
 			return factory(jQuery);
@@ -53,7 +53,7 @@
 	} else {
 		global.Menu = factory(global.jQuery);
 	}
-}) (window || {}, function($) {
+})(window || {}, function($) {
 	var createElement = function(tagName) {
 		return $(document.createElement(tagName));
 	};
@@ -501,4 +501,4 @@
 	};
 	
 	return Menu;
-});
+}))
