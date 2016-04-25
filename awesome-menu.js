@@ -348,7 +348,7 @@
 			var menuList = createElement(this.LIST_TAG).attr({
 				'class': levelConfig.listClass,
 				'data-selected-class': levelConfig.selectedClass,
-				'data-hide-after-selected': levelConfig.hideAfterSelected,
+				'data-hide-after-selected': levelConfig.hideAfterSelected
 			});
 
 			if (!levelConfig.listClass) {
