@@ -1,0 +1,51 @@
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+html {
+	background: #555;
+}
+
+.menu {
+	display: inline-block;
+	color: #fff;
+	font-family: "Microsoft YaHei", "\u5b8b\u4f53", arial, helvetica, sans-serif, tahoma;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #fff;
+	border-bottom: 1px solid #fff;
+}
+
+.list-1, .list-2 {
+	background: #333;
+	border-top: 1px solid #fff;
+}
+
+.list-2 {
+	margin-top: -1px;
+}
+
+.wrap {
+}
+
+.wrap + .wrap {
+	border-top: 1px solid #fff;
+}
+
+.item-1, .item-2 {
+	display: block;
+	padding: 5px 20px;
+}
+
+.item-2 {
+	white-space: nowrap;
+}
+
+.hover {
+	background: blue;
+}
+
+.item {
+
+}

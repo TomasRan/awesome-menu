@@ -1,9 +1,10 @@
-module.exports = {
+module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		uglify: {
 			options: {
-				banner: '/* <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy")%>*/\n'			 
+				banner: '/* <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy")%>*/\n',
+				sourceMap: true
 			},
 			dist: {
 				files: {
@@ -20,5 +21,5 @@ module.exports = {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	grunt.registerTask('watch',  ['watch']);
-	grunt.registerTask('uglify',  ['uglify']);
+	grunt.registerTask('default',  ['uglify']);
 };

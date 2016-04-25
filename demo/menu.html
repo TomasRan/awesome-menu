@@ -11,11 +11,10 @@
 			__inline('/components/lib/html5/html5.js');
 			</script>
 			<![endif]-->
-		<link href='/components/common/menu/menu.css' rel='stylesheet' type='text/css'>
+		<link href='menu.css' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
-		<div class='main'>
-		</div>
+		<div class='main'></div>
 	</body>
 	<script src='require.js'></script>
 	<script src='../node_modules/jquery/dist/jquery.js'></script>
@@ -23,6 +22,7 @@
 		requirejs(['../awesome-menu'], function(Menu) {
 			var menu = new Menu({
 				'menuId': 'menu',
+				'menuClass': 'menu',
 				'defaultSelected': {
 					'id': 1, 'level': 1
 				},
@@ -31,108 +31,107 @@
 				},
 				'list': [{
 					'id': '1',
-					'name': '地理',
-					'content': '地理',
+					'name': '中国',
+					'content': '中国 🇨🇳',
 					'list': [{
 						'id': '1-1',
-						'name': '欧洲',
-						'content': '<span>欧洲</span>',
+						'name': '北京',
+						'content': '北京',
 						'list': [{
 							'id': '1-1-1',
-							'name': '英国',
-							'content': '英国 🇬🇧',
+							'name': '海淀区',
+							'content': '海淀区',
+							'list': [{
+								'id': '1-1-1-1',
+								'name': '五道口',
+								'content': '五道口',
+							}, {
+								'id': '1-1-1-2',
+								'name': '中关村',
+								'content': '中关村',
+							}, {
+								'id': '1-1-1-3',
+								'name': '双榆树',
+								'content': '双榆树',
+							}, {
+								'id': '1-1-1-4',
+								'name': '知春路',
+								'content': '知春路',
+							}, {
+								'id': '1-1-1-5',
+								'name': '知春里',
+								'content': '知春里',
+							}, {
+								'id': '1-1-1-6',
+								'name': '安宁庄',
+								'content': '安宁庄',
+							}, {
+								'id': '1-1-1-7',
+								'name': '四季青',
+								'content': '四季青',
+							}]
 						}, {
 							'id': '1-1-2',
-							'name': '法国',
-							'content': '法国 🇫🇷',
+							'name': '昌平区',
+							'content': '昌平区',
+						}, {
+							'id': '1-1-3',
+							'name': '房山区',
+							'content': '房山区',
+						}, {
+							'id': '1-1-4',
+							'name': '朝阳区',
+							'content': '朝阳区',
+					
 						}]
 					}, {
 						'id': '1-2',
-						'name': '美洲',
-						'content': '美洲',
-						'list': [{
-							'id': '1-2-1',
-							'name': '美国',
-							'content': '美国 🇺🇸',
-						}, {
-							'id': '1-2-2',
-							'name': '加拿大',
-							'content': '加拿大 ➕',
-						}]
+						'name': '上海',
+						'content': '上海',
 					}, {
 						'id': '1-3',
-						'name': '亚洲',
-						'content': '亚洲',
-						'list': [{
-							'id': '1-3-1',
-							'name': '中国',
-							'content': '中国 🇨🇳',
-							'list': [{
-								'id': '1-3-1-1',
-								'name': '北京',
-								'content': '北京',
-							}, {
-								'id': '1-3-1-2',
-								'name': '上海',
-								'content': '上海',
-							}, {
-								'id': '1-3-1-3',
-								'name': '杭州',
-								'content': '杭州',
-							}]
-						}, {
-							'id': '1-3-2',
-							'name': '日本',
-							'content': '日本 🇯🇵'
-						}, {
-							'id': '1-3-3',
-							'name': '韩国',
-							'content': '韩国 🇰🇷'
-						}]
+						'name': '广州',
+						'content': '广州',
 					}, {
 						'id': '1-4',
-						'name': '非洲',
-						'content': '非洲',
+						'name': '深圳',
+						'content': '深圳'
 					}]
 				}, {
 					'id': '2',
-					'name': '数学',
-					'content': '数学',
-					'list': [{
-						'id': '2-1',
-						'name': '线性代数',
-						'content': '线性代数'
-					}, {
-						'id': '2-2',
-						'name': '离散函数',
-						'content': '离散函数'
-					}, {
-						'id': '2-3',
-						'name': '高等数学',
-						'content': '高等数学'
-					}]
+					'name': '美国',
+					'content': '美国 🇺🇸',
 				}, {
 					'id': '3',
-					'name': '计算机',
-					'content': '计算机',
-					'list': [{
-						'id': '3-1',
-						'name': '数据结构',
-						'content': '数据结构'
-					}, {
-						'id': '3-2',
-						'name': '编译原理',
-						'content': '编译原理'
-					}]
+					'name': '意大利',
+					'content': '意大利 🇮🇹',
+				}, {
+					'id': '4',
+					'name': '韩国',
+					'content': '韩国 🇰🇷',
+				}, {
+					'id': '5',
+					'name': '日本',
+					'content': '日本 🇯🇵',
+				}, {
+					'id': '6',
+					'name': '俄罗斯',
+					'content': '俄罗斯 🇷🇺',
 				}],
 				'levelConfig': {
 					'1': {
+						'listClass': 'list-1',
+						'itemClass': 'item-1',
+						'hoverClass': 'hover',
+						'wrapClass': 'wrap',
 						'position': 'bottom',
 						'childExpansion': false,
 						'childExpandEvent': 'click',
 						'childFoldEvent': 'click',
 					},
 					'2': {
+						'listClass': 'list-2',
+						'itemClass': 'item-2',
 						'childExpandEvent': 'mouseenter',
 						'childFoldEvent': 'mouseleave'
 					},

@@ -1,0 +1,13 @@
+engines:
+    eslint:
+        enabled: true
+    csslint:
+        enabled: true
+    scsslint:
+        enabled: true
+ratings:
+    path:
+    - "**/*"
+exclude_paths:
+- demo/**/*
+- dist/**/*
