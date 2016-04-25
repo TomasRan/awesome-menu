@@ -175,7 +175,7 @@
 	
 		// get specific level configuration
 		getLevelConfig: function(i) {
-			if (i == 0) {
+			if (i === 0 || i === '0') {
 				return {
 					'position': this.DEFAULT_POSITION,
 					'childExpansion': this.DEFAULT_CHILD_EXPANSION,
