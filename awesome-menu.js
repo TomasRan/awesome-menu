@@ -216,7 +216,7 @@
 	
 		checkOptions: function(options) {
 			this.options = $.extend({
-				'selectedFunc': function() {}.bind(this),
+				'selectedFunc': function() {},
 				'list': [], 
 				'levelConfig': {} 
 			}, options);
