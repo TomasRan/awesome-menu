@@ -10,7 +10,7 @@ Good Compalibility.
 
 It supports unlimited level.
 
-It supports custom style. You can customize different style for each level.
+It supports customized style. You can customize different style for each level.
 
 It supports customized submenu expansion style. All what you should do is passing a kind of expansion event, or a kind of fold event.
 
