@@ -1,5 +1,8 @@
 # awesome-menu
 
+[![bitHound Overall Score](https://www.bithound.io/github/TomasRan/awesome-menu/badges/score.svg)](https://www.bithound.io/github/TomasRan/awesome-menu)
+[![bitHound Dependencies](https://www.bithound.io/github/TomasRan/awesome-menu/badges/dependencies.svg)](https://www.bithound.io/github/TomasRan/awesome-menu/master/dependencies/npm)
+
 Description
 
 ![](http://cl.ly/312n3m082x1M/25E50F71-4506-4E84-BD2F-13D8392B1845.png)
