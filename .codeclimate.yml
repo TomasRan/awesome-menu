@@ -6,7 +6,7 @@ engines:
     scsslint:
         enabled: true
 ratings:
-    path:
+    paths:
     - "**/*"
 exclude_paths:
 - demo/**/*

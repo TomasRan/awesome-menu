@@ -7,7 +7,7 @@ Description
 
 ![](http://cl.ly/312n3m082x1M/25E50F71-4506-4E84-BD2F-13D8392B1845.png)
 
-![](http://cl.ly/243A362j2Q2q/0D7EB35D-0817-499E-B114-72A3775E3366.png)
+![](http://cl.ly/0T3W1W0I192K/Snip20160425_3.png)
 
 Install
 
