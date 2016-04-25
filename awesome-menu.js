@@ -5,201 +5,117 @@
  */
 
 /*
- *	@example:
+ *	@expamle:
  *		var menu = new Menu({
- *			'menuId': '',							// (optional) id of outermost container
- *			'menuClass': '',						// (optional) class of outermost container
- *			'defaultSelected': '',					// default selected item id
- *			'defaultPosition': '',					// (optional) default position relative to its parent menu
- *			'defaultExpansion': '',					// (optional) whether expand by default
- *			'defaultChildFoldEvent': '',			// (optional) the event type of triggering submenu's folding
- *			'defaultChildExpandEvent': '',			// (optional) the event type of triggering submenu's expansion
- *			'defaultSelectEvent': '',				// (optional) the event type of triggering menu item's selection 
- *			'defaultSelectedClass': '',				// (optional) default class of item selected
- *			'defaultHoverClass': '',				// (optional) default hover class of item
- *			'defaultListClass': '',					// (optional) default class of menu list
- *			'defaultItemClass': '',					// (optional) default class of menu item
- *			'selectedFunc': function(data) {},		// (optional) callback when item is selected
- *													   @return value:
- *															data: {
- *																id: '',			selected item's id
- *																level: 2,		selected item's level
- *															} 
- *			'list' : {
- *				'listClass': '',					// (optional)
- *				'itemClass': '',					// (optional)
- *				'hoverClass': '',					// (optional)
- *				'selectedClass': '',				// (optional)
- *				'selectEvent': 'click',				// (optional)
- *				'position': 'bottom',				// (optional)
- *				'expansion': false,					// (optional)
- *				'childExpandEvent': 'click',		// (optional)
- *				'childFoldEvent': 'click',			// (optional)
- *				'items': [{
- *					'id',							// unique mark 
- *					'itemClass': '',				// (optional)
- *					'content': 'xxx'				// the content of menu item
- *					'list': {						
- *						...
- *					}
- *				}, { ... }]
+ *			'menuId': '',							// the most outside container id
+ *			'menuClass': '',						// the mose outside container class
+ *			'defaultSelected': {},					// default selected
+ *			'onlyOneExpansion': true,				// only one list(include its parent's lists) expanded all the time
+ *			'selectedFunc': function() {},			// callback when select one of the items
+ *			'list':[{								// item data
+ *				'id': '',
+ *				'name': '',
+ *				'content': '',
+ *				'list': []
+ *			}, {
+ *				'id': '',
+ *				'name': '',
+ *				'content': '',
+ *				'list': []
+ *			}],
+ *			'levelConfig': {						// configuration of each level(child inherited its parent)
+ *				'1': {								// '1' represents the first level of the menu, and '2' for second level.. 
+ *					'listClass': '',				// class of list
+ *					'wrapClass': '',				// class of wrap element
+ *					'itemClass': '',				// class of item
+ *					'hoverClass': '',				// class of hover
+ *					'selectedClass': '',			// class of item which is selected
+ *					'selectEvent': '',				// the event triggering selected of one item
+ *					'childExpandEvent': '',			// the event triggering expanded of item's sublist
+ *					'childFoldEvent': '',			// the event triggering fold of item's sublist
+ *					'position': '',					// the position relative to its parent
+ *					'hideAfterSelected': ''			// whether disappeared when the item is selected
+ *				},
+ *				'2': {
+ *				},
+ *				...
  *			}
  *		});
- *
  */
 
-var $ = require('teacher:components/common/base/base.js');
-var uiClass = require('teacher:components/common/class/class.js');
-
-var createElement = function(tagName) {
-	return $(document.createElement(tagName));
-};
-
-var extendObject = function(src, dest) {
-	if (typeof dest !== 'object') {
-		return null;
+(function(global, factory) {
+	if (typeof define === 'function' && define.amd) {
+		define(['jquery'], function(jQuery) {
+			return factory(jQuery);
+		});
+	} else if (typeof module !== undefined && module.exports) {
+		module.exports = factory(require('jquery'));	
+	} else {
+		global.Menu = factory(global.jQuery);
 	}
-
-	for (var prop in src) {
-		if (src.hasOwnProperty(prop)) {
-			if (dest[prop] === undefined) {
-				dest[prop] = src[prop];
-			}
+}) (window || {}, function($) {
+	var createElement = function(tagName) {
+		return $(document.createElement(tagName));
+	};
+	
+	var extendObject = function(src, dest) {
+		if (typeof dest !== 'object') {
+			return null;
 		}
-	}	
-};
+	
+		for (var prop in src) {
+			if (src.hasOwnProperty(prop)) {
+				if (dest[prop] === undefined) {
+					dest[prop] = src[prop];
+				}
+			}
+		}	
+	};
+	
+	var coverBoolean = function(src, dest) {
+		return dest === undefined ? src : getBoolean(dest);
+	};
+	
+	var getBoolean = function(str) {
+		return {
+			'true': true,
+			'false': false
+		}[str];
+	};
 
-var Menu = uiClass().extend({
-	START_LEVEL: 1,
-	LEVEL_STEP: 1,
-	DEFAULT_POSITION: 'bottom',
-	DEFAULT_EXPANSION: true,
-	DEFAULT_CHILD_FOLD_EVENT: 'click',
-	DEFAULT_CHILD_EXPAND_EVENT: 'click',
-	DEFAULT_SELECT_EVENT: 'click',
-	DEFAULT_SELECTED_CLASS: '',
-	DEFAULT_HOVER_CLASS: '',
-	DEFAULT_LIST_CLASS: '',
-	DEFAULT_ITEM_CLASS: '',
-	ITEM_TAG: 'a',
-	WRAP_TAG: 'dt',
-	LIST_TAG: 'dl',
-
-	init: function(options) {
+	var Menu = function(options) {
 		this.checkOptions(options);
 		this.menu = createElement('menu');
-	},
+		this.currentSelected = {};
+	};
 
-	checkOptions: function(options) {
-		this.options = $.extend({
-			'selectedFunc': function() {},
-			'list': {}
-		}, options);
+	Menu.prototype = {
+		START_LEVEL: 1,
+		LEVEL_STEP: 1,
+	
+		DEFAULT_HIDE_AFTER_SELECTED: false,
+		DEFUALT_HIDE_AFTER_SELECTED_TIME: 50,
+	
+		DEFAULT_POSITION: 'bottom',
+	
+		ONLY_ONE_EXPANSION: true,
+		DEFAULT_CHILD_EXPANSION: true,
+		DEFAULT_CHILD_FOLD_EVENT: 'click',
+		DEFAULT_CHILD_EXPAND_EVENT: 'click',
+		DEFAULT_SELECT_EVENT: 'click',
+	
+		DEFAULT_MENU_CLASS: '',
+		DEFAULT_LIST_CLASS: '',
+		DEFAULT_WRAP_CLASS: '',
+		DEFAULT_ITEM_CLASS: '',
+		DEFAULT_SELECTED_CLASS: 'selected',
+		DEFAULT_HOVER_CLASS: 'hover',
+	
+		LIST_TAG: 'dl',
+		WRAP_TAG: 'dt',
+		ITEM_TAG: 'a',
 
-
-		var defaultExpansion = this.options['defaultExpansion'] === undefined ? this.DEFAULT_EXPANSION : this.options.defaultExpansion;
-		this.completeOptions(this.options.list, {
-			'position': this.options.defaultPosition || this.DEFAULT_POSITION,
-			'expansion': defaultExpansion,
-			'childExpandEvent': this.options.defaultChildExpandEvent || this.DEFAULT_CHILD_EXPAND_EVENT,
-			'childFoldEvent': this.options.defaultChildFoldEvent || this.DEFAULT_CHILD_FOLD_EVENT,
-			'selectEvent': this.options.defaultSelectEvent || this.DEFAULT_SELECT_EVENT,
-			'selectedClass': this.options.defaultSelectedClass || this.DEFAULT_SELECTED_CLASS,
-			'hoverClass': this.options.defaultHoverClass || this.DEFAULT_HOVER_CLASS,
-			'listClass': this.options.defaultListClass || this.DEFAULT_LIST_CLASS,
-			'itemClass': this.options.defaultItemClass || this.DEFAULT_ITEM_CLASS
-		});
-	},
-
-	// complete options 
-	completeOptions: function(list, parentList) {
-		extendObject(parentList, list);
-
-		$.each(list.items, function(i, item) {
-			item.itemClass = item.itemClass || list.itemClass;
-
-			var notExist = $.isEmptyObject(item.list);
-
-			 if (!notExist) {
-				item.list.itemClass = item.list.itemClass || item.itemClass;
-				this.completeOptions(item.list, list);
-			}
-		}.bind(this));
-	},
-
-	// get the data of selected menu item
-	getSelectedItemData: function(item) {
-		return {
-			'id': item.attr('data-id'),
-			'level': item.attr('data-level')
-		};
-	},
-
-	// clear all selection
-	clearSelection: function() {
-		var lists = this.menu.find(this.LIST_TAG);
-
-		$.each(lists, function(i, list) {
-			var selectedClass = $(list).attr('data-selected-class');
-
-			$(list).children().each(function() {
-				var target = $(this).children(this.ITEM_TAG);
-
-				target.removeClass(selectedClass);
-			});
-		});
-	},
-
-	// recursive selection
-	recurseSelection: function(id) {
-		var target = this.menu.find('[data-id=' + id + ']');
-
-		if (target.length === 0) {
-			return null;
-		}
-
-		var parentList = target.parent().parent();
-		var parentTarget = parentList.siblings(this.ITEM_TAG);
-		var selectedClass = parentList.attr('data-selected-class');
-
-		target.addClass(selectedClass);
-
-		if (parentTarget.length === 0) {
-			return null;
-		} else {
-			return this.recurseSelection(parentTarget.attr('data-id'));
-		}
-	},
-
-	// select menu list
-	selectMenuList: function(id) {
-		var target = this.menu.find('[data-id=' + id + ']');
-
-		if (target.length === 0) {
-			return null;
-		}
-
-		this.clearSelection();
-		this.recurseSelection(id);
-		this.options.selectedFunc({
-			'id': target.attr('data-id'),
-			'level': target.attr('data-level')
-		});
-	},
-
-	// handleExpansion 
-	handleExpansion: function(id) {
-		$.each(this.menu.children().children(), function(i, item) {
-			var target = $(item).find('[data-id=' + id + ']');
-
-			if (target.length === 0) {
-				$(item).children(this.LIST_TAG).addClass('none');
-			}
-		}.bind(this));
-	},
-
-	getPositionSelector: function() {
-		var positionSelector = {
+		POSITION_SELECTOR: {
 			'top': {
 				'position':'absolute',
 				'left': 0,
@@ -220,162 +136,369 @@ var Menu = uiClass().extend({
 				'right': '100%',
 				'top': 0
 			}
-		};
+		},
 
-		return positionSelector;
-	},
-
-	// construct a submenu
-	constructMenuList: function(list) {
-		var menuList = createElement(this.LIST_TAG).attr({
-			'class': list.listClass,
-			'data-selected-class': list.selectedClass,
-			'data-expand-event': list.childExpandEvent,
-			'data-fold-event': list.childFoldEvent,
-		})[list.expansion ? 'removeClass' : 'addClass']('none');
-
-		return menuList;
-	},
-
-	// construct single menu item
-	constructMenuItem: function(item, level) {
-		var menuItem = createElement(this.WRAP_TAG).css({
-			'position': 'relative'	
-		});
-		var menuItemContent = createElement(this.ITEM_TAG);
-
-		menuItemContent.html(item.content).attr({
-			'data-id': item.id,
-			'data-level': level,
-			'class': item.itemClass
-		}).appendTo(menuItem);
-
-		return menuItem;
-	},
-
-	// set the menu list's relative position
-	setMenuListPosition: function(position, target) {
-		var positionSelector = this.getPositionSelector();
-
-		target.css(positionSelector[position]);
-	},
-
-	// consturct the whole menu
-	constructMenu: function(list, level, parentList) {
-		if ($.isEmptyObject(list)) {
-			return null;
-		}
-
-		var menuList = this.constructMenuList(list);
-
-		$.each(list.items, function(i, item) {
-			var menuItem = this.constructMenuItem(item, level).appendTo(menuList);
-
-			this.bindHoverEvent(menuItem, list.hoverClass);
-			if (item.list) {
-				menuItem.append(this.constructMenu(item.list, level + this.LEVEL_STEP, list));
+		DEFAULT_CLASS: {
+			'menu': {
+				'display': 'inline-block',
+				'padding': 0,
+				'margin': 0
+			},
+			'list': {
+				'margin': 0
+			},
+			'wrap': {
+			},
+			'item': {
+				'display': 'block',
+				'white-space': 'nowrap'
 			}
-		}.bind(this));
+		},
+	
+		getFilterString: function(option) {
+			return '[data-id=' + option.id + '][data-level=' + option.level + ']';
+		},
 
-		this.setMenuListPosition(list.position, menuList);
-
-		// bind expansion events
-		if (list.childExpandEvent === list.childFoldEvent) {
-			menuList.on(list.childExpandEvent, function(e) {
-				e.stopPropagation();
-				$(e.target).siblings(this.LIST_TAG).toggleClass('none');
-			}.bind(this));
-		} else {
-			this.bindExpansionEvent(menuList, list.childExpandEvent, this.WRAP_TAG, function(e, target) {
-				var expandEvent = $(target).parent().attr('data-expand-event');
-				
-				if (expandEvent === e.type) {
-					$(target).children(this.LIST_TAG).removeClass('none');
+		// get specific list's level
+		getListLevel: function(list) {
+			var maxLevel = 1;
+			var repeateCount = -1;
+	
+			for (var i = 0; i < list.length; i++) {
+				if (list[i].list) {
+					repeateCount++;
+					maxLevel = maxLevel + this.getListLevel(list[i].list);
+				}
+			}  
+			return maxLevel - Math.max(0, repeateCount);
+		},
+	
+		// get specific level configuration
+		getLevelConfig: function(i) {
+			if (i == 0) {
+				return {
+					'position': this.DEFAULT_POSITION,
+					'childExpansion': this.DEFAULT_CHILD_EXPANSION,
+					'childExpandEvent': this.DEFAULT_CHILD_EXPAND_EVENT,
+					'childFoldEvent': this.DEFAULT_CHILD_FOLD_EVENT,
+					'selectEvent': this.DEFAULT_SELECT_EVENT,
+					'selectedClass': this.DEFAULT_SELECTED_CLASS,
+					'hideAfterSelected': this.DEFAULT_HIDE_AFTER_SELECTED,
+					'hoverClass': this.DEFAULT_HOVER_CLASS,
+					'listClass': this.DEFAULT_LIST_CLASS,
+					'wrapClass': this.DEFAULT_WRAP_CLASS,
+					'itemClass': this.DEFAULT_ITEM_CLASS
+				};
+			}
+	
+			return this.options.levelConfig[i.toString()];
+		},
+	
+		// whether has sublist
+		hasSubList: function(target) {
+			if (target.siblings(this.LIST_TAG).length === 0) {
+				return true;
+			} else {
+				return false;	
+			}
+		},
+	
+		// complete levelConfig, child inherit parent
+		completeLevelConfig: function() {
+			for (var i = 1; i <= this.totalLevel; i++) {
+				if (this.getLevelConfig(i) === undefined) {
+					this.options.levelConfig[i.toString()] = {};
+				}
+	
+				extendObject(this.getLevelConfig(i-1), this.getLevelConfig(i));
+			}
+		},
+	
+		checkOptions: function(options) {
+			this.options = $.extend({
+				'selectedFunc': function() {}.bind(this),
+				'list': [], 
+				'levelConfig': {} 
+			}, options);
+	
+			this.totalLevel = this.getListLevel(this.options.list);
+			this.completeLevelConfig();
+		},
+	
+		// get the data of selected menu item
+		getSelectedItemData: function(item) {
+			var data = [];
+			var parentLists = item.parents(this.LIST_TAG);
+	
+			Array.prototype.pop.call(parentLists);
+	
+			data.push({
+				'id': item.attr('data-id'),
+				'name': item.attr('data-name'),
+				'level': item.attr('data-level'),
+				'isLastLevel': this.hasSubList(item)
+			});
+	
+			if (parentLists.length !== 0) {
+				$.each(parentLists, function(i, list) {
+					data.push({
+						'id': $(list).siblings().attr('data-id'),
+						'name': $(list).siblings().attr('data-name'),
+						'level': $(list).siblings().attr('data-level'),
+						'isLastLevel': this.hasSubList($(list).siblings())
+					})
+				}.bind(this));
+			}
+	
+			return data;
+		},
+		
+		// clear all selection
+		clearSelection: function() {
+			var lists = this.menu.find(this.LIST_TAG);
+	
+			$.each(lists, function(i, list) {
+				var selectedClass = $(list).attr('data-selected-class');
+	
+				$(list).children().each(function() {
+					var target = $(this).children(this.ITEM_TAG);
+	
+					target.removeClass(selectedClass);
+				});
+			});
+		},
+	
+		// recursive selection
+		recurseSelection: function(option) {
+			var filterStr = this.getFilterString(option); 
+			var target = this.menu.find(filterStr);
+	
+			if (target.length === 0) {
+				return null;
+			}
+	
+			var list = target.parent().parent();
+			var parentTarget = list.siblings(this.ITEM_TAG);
+			var selectedClass = list.attr('data-selected-class');
+			var hideAfterSelected = getBoolean(list.attr('data-hide-after-selected'));
+	
+			if (hideAfterSelected) {
+				setTimeout(function() {
+					list.hide();
+				}, this.SELECTED_DISAPPEARED_TIME);
+			};
+	
+			target.addClass(selectedClass);
+	
+			if (parentTarget.length === 0) {
+				return null;
+			} else {
+				return this.recurseSelection({
+					'id': parentTarget.attr('data-id'),
+					'level': parentTarget.attr('data-level')
+				});
+			}
+		},
+	
+		// select menu list
+		select: function(option) {
+			if (typeof option !== 'object') {
+				return null;	
+			}
+	
+			if (option['id'] === undefined || option['level'] === undefined) {
+				return null;	
+			}
+	
+			var filterStr = this.getFilterString(option);
+			var target = this.menu.find(filterStr);
+	
+			if (target.length === 0) {
+				return null;
+			}
+	
+			var selectedData = this.getSelectedItemData(target);
+	
+			this.currentSelected = selectedData[0];
+	
+			if (coverBoolean(this.ONLY_ONE_EXPANSION, this.options.onlyOneExpansion)) {
+				this.handleExpansion();
+			}
+	
+			this.clearSelection();
+			this.recurseSelection(option);
+			this.options.selectedFunc.call(this, selectedData);
+		},
+	
+		// handle expansion when one of items is selected 
+		handleExpansion: function() {
+			var filterStr = this.getFilterString(this.currentSelected);
+	
+			$.each(this.menu.children().children(), function(i, item) {
+				var target = $(item).find(filterStr);
+	
+				if (target.length === 0) {
+					$(item).children(this.LIST_TAG).hide();
 				}
 			}.bind(this));
-			this.bindExpansionEvent(menuList, list.childFoldEvent, this.WRAP_TAG, function(e, target) {
-				var foldEvent = $(target).parent().attr('data-fold-event');
+		},
+	
+		// construct a sublist
+		constructMenuList: function(levelConfig, parentLevelConfig) {
+			var menuList = createElement(this.LIST_TAG).attr({
+				'class': levelConfig.listClass,
+				'data-selected-class': levelConfig.selectedClass,
+				'data-hide-after-selected': levelConfig.hideAfterSelected,
+			});
 
-				if (foldEvent === e.type) {
-					$(target).children(this.LIST_TAG).addClass('none');
+			if (!levelConfig.listClass) {
+				menuList.css(this.DEFAULT_CLASS['list']);
+			}
+
+			if (getBoolean(parentLevelConfig.childExpansion)) {
+				menuList.show();	
+			} else {
+				menuList.hide();	
+			}
+
+			return menuList;
+		},
+	
+		// construct a subitem 
+		constructMenuItem: function(item, level, levelConfig) {
+			var menuItem = createElement(this.WRAP_TAG).attr({
+				'class': levelConfig.wrapClass
+			}).css({
+				'position': 'relative'
+			});
+
+			if (!levelConfig.wrapClass) {
+				menuItem.css(this.DEFAULT_CLASS['wrap']);
+			}
+
+			var menuItemContent = createElement(this.ITEM_TAG);
+	
+			menuItemContent.html(item.content).attr({
+				'class': levelConfig.itemClass,
+				'data-id': item.id,
+				'data-name': item.name,
+				'data-level': level
+			}).appendTo(menuItem);
+	
+			if (!levelConfig.itemClass) {
+				menuItem.css(this.DEFAULT_CLASS['item']);
+			}
+
+			return menuItem;
+		},
+	
+		// set the menu list's relative position
+		setMenuListPosition: function(position, target) {
+			target.css(this.POSITION_SELECTOR[position]);
+		},
+	
+		// consturct the whole menu
+		constructMenu: function(list, level) {
+			var levelConfig = this.getLevelConfig(level);
+			var parentLevelConfig = this.getLevelConfig(level - 1);
+			var menuList = this.constructMenuList(levelConfig, parentLevelConfig);
+	
+			$.each(list, function(i, item) {
+				var menuItem = this.constructMenuItem(item, level, levelConfig).appendTo(menuList);
+	
+				this.bindHoverEvent(menuItem, levelConfig.hoverClass);
+				if (item.list) {
+					menuItem.append(this.constructMenu(item.list, level + this.LEVEL_STEP));
 				}
 			}.bind(this));
-		}
-
-		// bind select events
-		this.bindSelectionEvent(list.selectEvent, menuList.children().children(), function(e) {
-			var data = this.getSelectedItemData($(e.target));
-
-			this.handleExpansion(data.id);
-			this.selectMenuList(data.id);
-		}.bind(this));
-
-		return menuList;
-	},
-
-	bindExpansionEvent: function(target, eventType, tag, callback) {
-		target.on(eventType, tag, function(e) {
-			return callback(e, this);
-		});	
-	},
-
-	bindHoverEvent: function(target, hoverClass) {
-		var self = this;
-
-		target.hover(function(e) {
-			if (e.target.nodeName.toLowerCase() === self.ITEM_TAG)	{
+	
+			this.setMenuListPosition(levelConfig.position, menuList);
+			this.bindExpansionEvent(levelConfig, menuList);
+			this.bindSelectionEvent(levelConfig, menuList);
+	
+			return menuList;
+		},
+	
+		bindExpansionEvent: function(levelConfig, menuList) {
+			var self = this;
+			if (levelConfig.childExpandEvent === levelConfig.childFoldEvent) {
+				menuList.children().on(levelConfig.childExpandEvent, function(e) {
+					e.stopPropagation();
+					$(e.target).siblings(self.LIST_TAG).toggle();
+				});
+			} else {
+				menuList.children().on(levelConfig.childExpandEvent, function(e) {
+					$(this).children(self.LIST_TAG).show();
+				});
+	
+				menuList.children().on(levelConfig.childFoldEvent, function(e) {
+					$(this).children(self.LIST_TAG).hide();
+				});
+			}
+		},
+	
+		bindHoverEvent: function(target, hoverClass) {
+			var self = this;
+			
+			target.on('mouseenter', function(e) {
 				$(this).children(self.ITEM_TAG).addClass(hoverClass);
-			}
-		}, function(e) {
-			if (e.target.nodeName.toLowerCase() === self.ITEM_TAG)	{
+			}).on('mouseleave', function(e) {
 				$(this).children(self.ITEM_TAG).removeClass(hoverClass);
+			});
+		},
+	
+		bindSelectionEvent: function(levelConfig, menuList) {
+			var self = this;
+			var target = menuList.children().children().filter(function() {
+				return this.nodeName.toLowerCase() === self.ITEM_TAG;
+			});						
+	
+			target.on(levelConfig.selectEvent, function(e) {
+				if (this.nodeName.toLowerCase() === self.ITEM_TAG) {
+					var data = self.getSelectedItemData($(this));
+	
+					self.select({
+						'id': data[0].id,
+						'level': data[0].level
+					});
+				}
+			});
+		},
+	
+		render: function() {
+			var menuContent = this.constructMenu(this.options.list, this.START_LEVEL);
+	
+			this.menu.attr({
+				'id': this.options.menuId,
+				'class': this.options.menuClass
+			});
+
+			if (!this.options.menuClass) {
+				this.menu.css(this.DEFAULT_CLASS['menu']);
 			}
-		});
-	},
-
-	bindSelectionEvent: function(eventType, target, callback) {
-		if (!eventType) {
-			return {};
-		}
-
-		var self = this;
-		var elements = target.filter(function() {
-			return this.nodeName.toLowerCase() === self.ITEM_TAG;
-		});
-
-		elements.on(eventType, function(e) {
-			if (e.target.nodeName.toLowerCase() === self.ITEM_TAG) {
-				return callback(e);
+	
+			if (menuContent) {
+				menuContent.appendTo(this.menu);
+				this.select(this.options.defaultSelected);
 			}
-		});
-	},
-
-	render: function() {
-		var menuContent = this.constructMenu(this.options.list, this.START_LEVEL, {});
-
-		this.menu.attr({
-			'id': this.options.menuId,
-			'class': this.options.menuClass
-		});
-
-		if (menuContent) {
-			menuContent.appendTo(this.menu);
-			this.selectMenuList(this.options.defaultSelected);
+	
+			return this.menu;
+		},
+	
+		// update specific item's content
+		updateContent: function(option, content) {
+			var filterStr = '[data-id=' + option.id + '][data-level=' + option.level + ']';
+	
+			this.menu.find(filterStr).html(content);
+		},
+	
+		reset: function(options) {
+			this.options = options;
+			this.checkOptions();
+			this.menu.empty();
+			this.render();
 		}
-
-		return this.menu;
-	},
-
-	updateContent: function(id, content) {
-		this.menu.find('[data-id='+ id + ']').html(content);
-	},
-
-	reset: function(options) {
-		this.options = options;
-		this.checkOptions();
-		this.menu.empty();
-		this.render();
-	}
+	};
+	
+	return Menu;
 });
-
-module.exports = Menu;

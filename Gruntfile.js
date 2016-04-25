@@ -1,6 +1,6 @@
 module.exports = {
 	grunt.initConfig({
-		pkg: grun.file.readJSON('package.json'),
+		pkg: grunt.file.readJSON('package.json'),
 		uglify: {
 			options: {
 				banner: '/* <%= pkg.name %> <%= grunt.template.today("dd-mm-yyyy")%>*/\n'			 

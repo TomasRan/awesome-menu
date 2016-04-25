@@ -11,21 +11,139 @@
 			__inline('/components/lib/html5/html5.js');
 			</script>
 			<![endif]-->
-
-			<style>
-				* {
-					margin: 0;
-					padding: 0;
-					border: 0;
-				}
-
-				.none {
-					display: none;
-				}
-			</style>
+		<link href='/components/common/menu/menu.css' rel='stylesheet' type='text/css'>
 	</head>
 	<body>
 		<div class='main'>
 		</div>
 	</body>
+	<script src='require.js'></script>
+	<script src='../node_modules/jquery/dist/jquery.js'></script>
+	<script>
+		requirejs(['../awesome-menu'], function(Menu) {
+			var menu = new Menu({
+				'menuId': 'menu',
+				'defaultSelected': {
+					'id': 1, 'level': 1
+				},
+				'selectedFunc': function(data) {
+					console.log(this.currentSelected);	
+				},
+				'list': [{
+					'id': '1',
+					'name': '地理',
+					'content': '地理',
+					'list': [{
+						'id': '1-1',
+						'name': '欧洲',
+						'content': '<span>欧洲</span>',
+						'list': [{
+							'id': '1-1-1',
+							'name': '英国',
+							'content': '英国 🇬🇧',
+						}, {
+							'id': '1-1-2',
+							'name': '法国',
+							'content': '法国 🇫🇷',
+						}]
+					}, {
+						'id': '1-2',
+						'name': '美洲',
+						'content': '美洲',
+						'list': [{
+							'id': '1-2-1',
+							'name': '美国',
+							'content': '美国 🇺🇸',
+						}, {
+							'id': '1-2-2',
+							'name': '加拿大',
+							'content': '加拿大 ➕',
+						}]
+					}, {
+						'id': '1-3',
+						'name': '亚洲',
+						'content': '亚洲',
+						'list': [{
+							'id': '1-3-1',
+							'name': '中国',
+							'content': '中国 🇨🇳',
+							'list': [{
+								'id': '1-3-1-1',
+								'name': '北京',
+								'content': '北京',
+							}, {
+								'id': '1-3-1-2',
+								'name': '上海',
+								'content': '上海',
+							}, {
+								'id': '1-3-1-3',
+								'name': '杭州',
+								'content': '杭州',
+							}]
+						}, {
+							'id': '1-3-2',
+							'name': '日本',
+							'content': '日本 🇯🇵'
+						}, {
+							'id': '1-3-3',
+							'name': '韩国',
+							'content': '韩国 🇰🇷'
+						}]
+					}, {
+						'id': '1-4',
+						'name': '非洲',
+						'content': '非洲',
+					}]
+				}, {
+					'id': '2',
+					'name': '数学',
+					'content': '数学',
+					'list': [{
+						'id': '2-1',
+						'name': '线性代数',
+						'content': '线性代数'
+					}, {
+						'id': '2-2',
+						'name': '离散函数',
+						'content': '离散函数'
+					}, {
+						'id': '2-3',
+						'name': '高等数学',
+						'content': '高等数学'
+					}]
+				}, {
+					'id': '3',
+					'name': '计算机',
+					'content': '计算机',
+					'list': [{
+						'id': '3-1',
+						'name': '数据结构',
+						'content': '数据结构'
+					}, {
+						'id': '3-2',
+						'name': '编译原理',
+						'content': '编译原理'
+					}]
+				}],
+				'levelConfig': {
+					'1': {
+						'position': 'bottom',
+						'childExpansion': false,
+						'childExpandEvent': 'click',
+						'childFoldEvent': 'click',
+					},
+					'2': {
+						'childExpandEvent': 'mouseenter',
+						'childFoldEvent': 'mouseleave'
+					},
+					'3': {
+						'selectedDisappeared': true,
+						'position': 'right'
+					}
+				}
+			});
+
+			$('.main').append(menu.render());
+		});
+	</script>
 </html>
