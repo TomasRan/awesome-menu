@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-    - "5"
-script: grunt
-branches:
-    only:
-    - master
-after_success:
-    - bash <(curl -s https://codecov.io/bash)
