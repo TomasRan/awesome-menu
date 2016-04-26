@@ -7,6 +7,8 @@
 [![Issue Count](https://codeclimate.com/github/TomasRan/awesome-menu/badges/issue_count.svg)](https://codeclimate.com/github/TomasRan/awesome-menu)
 
 ## Description
+Here is a simple [demo](http://tomasran.github.io/awesome-menu/demo/demo.html).
+
 Good Compalibility.
 
 It supports unlimited level.
