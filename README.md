@@ -1,5 +1,6 @@
 # awesome-menu
 
+![](https://travis-ci.org/TomasRan/awesome-menu.svg?branch=master)
 [![bitHound Overall Score](https://www.bithound.io/github/TomasRan/awesome-menu/badges/score.svg)](https://www.bithound.io/github/TomasRan/awesome-menu)
 [![bitHound Dependencies](https://www.bithound.io/github/TomasRan/awesome-menu/badges/dependencies.svg)](https://www.bithound.io/github/TomasRan/awesome-menu/master/dependencies/npm)
 [![Code Climate](https://codeclimate.com/github/TomasRan/awesome-menu/badges/gpa.svg)](https://codeclimate.com/github/TomasRan/awesome-menu)
