@@ -173,6 +173,21 @@
 			}  
 			return maxLevel - Math.max(0, repeateCount);
 		},
+
+		getTotalLevel: function(list) {
+			var arr = [];
+			var baseLevel = 1;
+			var temp = 0;	
+
+			for (var i = 0; i < list.length; i++) {
+				if (list[i].list) {
+					arr.push(this.getListLevel(list[i].list));
+					temp = Math.max(temp, this.getListLevel(list[i].list));
+				}
+			}
+
+			return baseLevel + temp;
+		},
 	
 		// get specific level configuration
 		getLevelConfig: function(i) {
@@ -222,7 +237,7 @@
 				'levelConfig': {} 
 			}, options);
 	
-			this.totalLevel = this.getListLevel(this.options.list);
+			this.totalLevel = this.getTotalLevel(this.options.list);
 			this.completeLevelConfig();
 		},
 	
