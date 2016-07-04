@@ -355,6 +355,8 @@
 	
 				if (target.length === 0) {
 					$(item).children(this.LIST_TAG).hide();
+				} else {
+					$(target).parent().siblings().children(this.LIST_TAG).addClass('none');
 				}
 			}.bind(this));
 		},
@@ -509,7 +511,7 @@
 		},
 	
 		reset: function(options) {
-			this.options = options;
+			this.options = $.extend(this.options, options);
 			this.checkOptions();
 			this.menu.empty();
 			this.render();
